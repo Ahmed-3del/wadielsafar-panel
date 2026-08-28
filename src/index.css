@@ -1,0 +1,36 @@
+@import 'tailwindcss';
+
+/*
+ * Same navy/gold brand palette as the customer site, so the two products read
+ * as one system. Navy leads here rather than gold: the panel is a working tool,
+ * and gold is most useful reserved for genuine emphasis (offer badges, primary
+ * actions) instead of general chrome.
+ */
+@theme {
+  --color-navy-50: #f2f3f7;
+  --color-navy-100: #e2e4ee;
+  --color-navy-200: #c5c9dd;
+  --color-navy-300: #9aa1c1;
+  --color-navy-400: #6b74a1;
+  --color-navy-500: #454e84;
+  --color-navy-600: #2c3468;
+  --color-navy-700: #1a2153;
+  --color-navy-800: #0f1444;
+  --color-navy-900: #060940;
+  --color-navy-950: #03051f;
+
+  --color-gold-50: #fdf9ed;
+  --color-gold-100: #faf0cf;
+  --color-gold-200: #f4e0a0;
+  --color-gold-300: #eecd6c;
+  --color-gold-400: #e7c05e;
+  --color-gold-500: #e8ba30;
+  --color-gold-600: #c99a1c;
+  --color-gold-700: #a17716;
+  --color-gold-800: #7c5b16;
+  --color-gold-900: #654a17;
+}
+
+body {
+  margin: 0;
+}
