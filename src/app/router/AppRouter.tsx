@@ -16,6 +16,12 @@ const DashboardPage = lazy(() =>
 const InquiriesListPage = lazy(() =>
   import('@/features/inquiries').then((m) => ({ default: m.InquiriesListPage })),
 )
+const InquiryFieldsListPage = lazy(() =>
+  import('@/features/inquiryFields').then((m) => ({ default: m.InquiryFieldsListPage })),
+)
+const InquiryFieldFormPage = lazy(() =>
+  import('@/features/inquiryFields').then((m) => ({ default: m.InquiryFieldFormPage })),
+)
 const InquiryDetailPage = lazy(() =>
   import('@/features/inquiries').then((m) => ({ default: m.InquiryDetailPage })),
 )
@@ -36,6 +42,12 @@ const VisasListPage = lazy(() =>
 )
 const VisaFormPage = lazy(() =>
   import('@/features/visas').then((m) => ({ default: m.VisaFormPage })),
+)
+const VisaCountriesListPage = lazy(() =>
+  import('@/features/visas').then((m) => ({ default: m.VisaCountriesListPage })),
+)
+const VisaCountryFormPage = lazy(() =>
+  import('@/features/visas').then((m) => ({ default: m.VisaCountryFormPage })),
 )
 const ServicesListPage = lazy(() =>
   import('@/features/services').then((m) => ({ default: m.ServicesListPage })),
@@ -60,6 +72,12 @@ const CruisesListPage = lazy(() =>
 )
 const CruiseFormPage = lazy(() =>
   import('@/features/cruises').then((m) => ({ default: m.CruiseFormPage })),
+)
+const CruisePortsListPage = lazy(() =>
+  import('@/features/cruisePorts').then((m) => ({ default: m.CruisePortsListPage })),
+)
+const CruisePortFormPage = lazy(() =>
+  import('@/features/cruisePorts').then((m) => ({ default: m.CruisePortFormPage })),
 )
 const OffersListPage = lazy(() =>
   import('@/features/offers').then((m) => ({ default: m.OffersListPage })),
@@ -106,6 +124,12 @@ const BranchesListPage = lazy(() =>
 const BranchFormPage = lazy(() =>
   import('@/features/branches').then((m) => ({ default: m.BranchFormPage })),
 )
+const PromotionsListPage = lazy(() =>
+  import('@/features/promotions').then((m) => ({ default: m.PromotionsListPage })),
+)
+const PromotionFormPage = lazy(() =>
+  import('@/features/promotions').then((m) => ({ default: m.PromotionFormPage })),
+)
 const SocialLinksListPage = lazy(() =>
   import('@/features/socialLinks').then((m) => ({ default: m.SocialLinksListPage })),
 )
@@ -144,6 +168,9 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: lazyRoute(<DashboardPage />) },
       { path: 'inquiries', element: lazyRoute(<InquiriesListPage />) },
+      { path: 'contact-fields', element: lazyRoute(<InquiryFieldsListPage />) },
+      { path: 'contact-fields/new', element: lazyRoute(<InquiryFieldFormPage />) },
+      { path: 'contact-fields/:id/edit', element: lazyRoute(<InquiryFieldFormPage />) },
       { path: 'inquiries/:id', element: lazyRoute(<InquiryDetailPage />) },
       { path: 'destinations', element: lazyRoute(<DestinationsListPage />) },
       { path: 'destinations/new', element: lazyRoute(<DestinationFormPage />) },
@@ -154,6 +181,9 @@ const router = createBrowserRouter([
       { path: 'visas', element: lazyRoute(<VisasListPage />) },
       { path: 'visas/new', element: lazyRoute(<VisaFormPage />) },
       { path: 'visas/:id/edit', element: lazyRoute(<VisaFormPage />) },
+      { path: 'visa-countries', element: lazyRoute(<VisaCountriesListPage />) },
+      { path: 'visa-countries/new', element: lazyRoute(<VisaCountryFormPage />) },
+      { path: 'visa-countries/:id/edit', element: lazyRoute(<VisaCountryFormPage />) },
       { path: 'services', element: lazyRoute(<ServicesListPage />) },
       { path: 'services/new', element: lazyRoute(<ServiceFormPage />) },
       { path: 'services/:id/edit', element: lazyRoute(<ServiceFormPage />) },
@@ -167,6 +197,9 @@ const router = createBrowserRouter([
       { path: 'cruises', element: lazyRoute(<CruisesListPage />) },
       { path: 'cruises/new', element: lazyRoute(<CruiseFormPage />) },
       { path: 'cruises/:slug/edit', element: lazyRoute(<CruiseFormPage />) },
+      { path: 'cruise-ports', element: lazyRoute(<CruisePortsListPage />) },
+      { path: 'cruise-ports/new', element: lazyRoute(<CruisePortFormPage />) },
+      { path: 'cruise-ports/:id/edit', element: lazyRoute(<CruisePortFormPage />) },
       { path: 'offers', element: lazyRoute(<OffersListPage />) },
       { path: 'offers/new', element: lazyRoute(<OfferFormPage />) },
       { path: 'offers/:slug/edit', element: lazyRoute(<OfferFormPage />) },
@@ -189,6 +222,9 @@ const router = createBrowserRouter([
       { path: 'branches', element: lazyRoute(<BranchesListPage />) },
       { path: 'branches/new', element: lazyRoute(<BranchFormPage />) },
       { path: 'branches/:id/edit', element: lazyRoute(<BranchFormPage />) },
+      { path: 'promotions', element: lazyRoute(<PromotionsListPage />) },
+      { path: 'promotions/new', element: lazyRoute(<PromotionFormPage />) },
+      { path: 'promotions/:id/edit', element: lazyRoute(<PromotionFormPage />) },
       { path: 'social-links', element: lazyRoute(<SocialLinksListPage />) },
       { path: 'social-links/new', element: lazyRoute(<SocialLinkFormPage />) },
       { path: 'social-links/:id/edit', element: lazyRoute(<SocialLinkFormPage />) },

@@ -35,6 +35,9 @@ export function ServiceFormPage() {
         description_ar: values.description_ar,
         description_en: values.description_en,
         icon: values.icon,
+        // Trimmed, so a stray space cannot make "/visas " a path the site
+        // routes to nowhere.
+        link: values.link.trim(),
         image: toNullableString(values.image),
         order: values.order,
         is_active: values.is_active,

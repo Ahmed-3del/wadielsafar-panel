@@ -30,6 +30,8 @@ export function CruiseFormPage() {
       {
         ...values,
         destination_id: values.destination_id ? Number(values.destination_id) : null,
+        // Blank means "not linked to a port", which the API stores as null.
+        departure_port_id: values.departure_port_id ? Number(values.departure_port_id) : null,
         cover_image: values.cover_image || null,
         // An empty date input is "not scheduled yet", not an empty string.
         departure_date: values.departure_date || null,

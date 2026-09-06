@@ -3,6 +3,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useQuery } from '@tanstack/react-query'
 import { Button, Input, Select } from '@/components/ui'
 import { FormField } from '@/components/forms/FormField'
+import { SearchSelect, type SearchSelectOption } from '@/components/forms/SearchSelect'
+import { useCruisePortOptions } from '../hooks/useCruisePortOptions'
 import { MediaUploadField } from '@/components/forms/MediaUploadField'
 import { destinationsApi } from '@/services/api/destinations'
 import { cruiseSchema, type CruiseFormValues } from '../schemas/cruiseSchema'
@@ -27,9 +29,13 @@ export function CruiseForm({
     queryFn: () => destinationsApi.list({ page: 1 }),
   })
 
+  const { data: portPage } = useCruisePortOptions()
+  const ports = portPage?.results ?? []
+
   const {
     register,
     control,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm<CruiseFormValues>({
@@ -40,6 +46,7 @@ export function CruiseForm({
       cruise_line_ar: initialValues?.cruise_line_ar ?? '',
       cruise_line_en: initialValues?.cruise_line_en ?? '',
       destination_id: initialValues?.destination ? String(initialValues.destination.id) : '',
+      departure_port_id: initialValues?.departure_port ? String(initialValues.departure_port.id) : '',
       departure_port_ar: initialValues?.departure_port_ar ?? '',
       departure_port_en: initialValues?.departure_port_en ?? '',
       description_ar: initialValues?.description_ar ?? '',
@@ -54,6 +61,18 @@ export function CruiseForm({
       is_active: initialValues?.is_active ?? true,
     },
   })
+
+  const portOptions: SearchSelectOption[] = ports.map((port) => ({
+    value: String(port.id),
+    label: `${port.city_en} — ${port.name_en}`,
+    hint: port.country_en,
+    image: port.country_code
+      ? `https://flagcdn.com/w40/${port.country_code.toLowerCase()}.png`
+      : undefined,
+    // So an Arabic search finds an English row.
+    keywords: `${port.city_ar} ${port.name_ar} ${port.country_ar}`,
+    preferred: port.is_popular,
+  }))
 
   return (
     <form
@@ -104,10 +123,43 @@ export function CruiseForm({
           />
         </FormField>
 
-        <FormField label="Departure port (Arabic)" htmlFor="departure_port_ar">
+        <FormField
+          label="Departure port"
+          htmlFor="departure_port_id"
+          error={errors.departure_port_id?.message}
+          hint="Links the sailing to a port in the catalogue, which is what lets the website answer &ldquo;cruises from the UAE&rdquo;. Picking one fills the two printed names below."
+        >
+          <Controller
+            name="departure_port_id"
+            control={control}
+            render={({ field }) => (
+              <SearchSelect
+                id="departure_port_id"
+                value={field.value}
+                options={portOptions}
+                placeholder="City, port or country…"
+                allowCustom={false}
+                onBlur={field.onBlur}
+                onChange={(next, option) => {
+                  field.onChange(next)
+                  if (!option) return
+                  const port = ports.find((row) => String(row.id) === option.value)
+                  if (!port) return
+                  // The printed names follow the pick, and stay editable: a
+                  // cruise line may call it "Dubai (Port Rashid)" on the
+                  // brochure and that is what the card should say.
+                  setValue('departure_port_ar', port.city_ar, { shouldValidate: true })
+                  setValue('departure_port_en', port.city_en, { shouldValidate: true })
+                }}
+              />
+            )}
+          />
+        </FormField>
+
+        <FormField label="Departure port as printed (Arabic)" htmlFor="departure_port_ar">
           <Input id="departure_port_ar" dir="rtl" {...register('departure_port_ar')} />
         </FormField>
-        <FormField label="Departure port (English)" htmlFor="departure_port_en">
+        <FormField label="Departure port as printed (English)" htmlFor="departure_port_en">
           <Input id="departure_port_en" {...register('departure_port_en')} />
         </FormField>
 

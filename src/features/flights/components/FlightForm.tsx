@@ -2,6 +2,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Input, Select } from '@/components/ui'
 import { FormField } from '@/components/forms/FormField'
+import { AirportField } from '@/components/forms/AirportField'
 import { MediaUploadField } from '@/components/forms/MediaUploadField'
 import { flightSchema, type FlightFormValues } from '../schemas/flightSchema'
 import { CABIN_CLASSES, TRIP_TYPES, type FlightDeal } from '../types'
@@ -22,6 +23,7 @@ export function FlightForm({
   const {
     register,
     control,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm<FlightFormValues>({
@@ -92,33 +94,55 @@ export function FlightForm({
           />
         </FormField>
         <FormField
-          label="Origin airport code"
+          label="Origin airport"
           htmlFor="origin_airport_code"
           error={errors.origin_airport_code?.message}
           required
+          hint="Search the airport catalogue — the city names above fill themselves in. A code typed by hand still saves, for an airport not in the list yet."
         >
-          <Input
-            id="origin_airport_code"
-            className="uppercase"
-            maxLength={3}
-            placeholder="RUH"
-            hasError={!!errors.origin_airport_code}
-            {...register('origin_airport_code')}
+          <Controller
+            name="origin_airport_code"
+            control={control}
+            render={({ field }) => (
+              <AirportField
+                id="origin_airport_code"
+                value={field.value}
+                onBlur={field.onBlur}
+                hasError={!!errors.origin_airport_code}
+                onType={field.onChange}
+                onPick={(airport) => {
+                  field.onChange(airport.iata_code)
+                  setValue('origin_city_ar', airport.city_ar, { shouldValidate: true })
+                  setValue('origin_city_en', airport.city_en, { shouldValidate: true })
+                }}
+              />
+            )}
           />
         </FormField>
         <FormField
-          label="Destination airport code"
+          label="Destination airport"
           htmlFor="destination_airport_code"
           error={errors.destination_airport_code?.message}
           required
+          hint="Search the airport catalogue — the city names below fill themselves in."
         >
-          <Input
-            id="destination_airport_code"
-            className="uppercase"
-            maxLength={3}
-            placeholder="DXB"
-            hasError={!!errors.destination_airport_code}
-            {...register('destination_airport_code')}
+          <Controller
+            name="destination_airport_code"
+            control={control}
+            render={({ field }) => (
+              <AirportField
+                id="destination_airport_code"
+                value={field.value}
+                onBlur={field.onBlur}
+                hasError={!!errors.destination_airport_code}
+                onType={field.onChange}
+                onPick={(airport) => {
+                  field.onChange(airport.iata_code)
+                  setValue('destination_city_ar', airport.city_ar, { shouldValidate: true })
+                  setValue('destination_city_en', airport.city_en, { shouldValidate: true })
+                }}
+              />
+            )}
           />
         </FormField>
         <FormField

@@ -3,6 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Input } from '@/components/ui'
 import { FormField } from '@/components/forms/FormField'
 import { MediaUploadField } from '@/components/forms/MediaUploadField'
+import { CountryField } from '@/components/forms/CountryField'
 import { destinationSchema, type DestinationFormValues } from '../schemas/destinationSchema'
 import type { Destination } from '../types'
 
@@ -22,6 +23,7 @@ export function DestinationForm({
   const {
     register,
     control,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm<DestinationFormValues>({
@@ -73,20 +75,39 @@ export function DestinationForm({
           <Input id="description_en" hasError={!!errors.description_en} {...register('description_en')} />
         </FormField>
         <FormField
+          label="Country"
+          htmlFor="country_en"
+          error={errors.country_en?.message ?? errors.country_ar?.message}
+          required
+          hint="Search and pick — the Arabic name fills itself in. Type freely if the country is not listed."
+        >
+          <Controller
+            name="country_en"
+            control={control}
+            render={({ field }) => (
+              <CountryField
+                id="country_en"
+                value={field.value}
+                onBlur={field.onBlur}
+                hasError={!!errors.country_en || !!errors.country_ar}
+                onType={field.onChange}
+                onPick={(country) => {
+                  field.onChange(country.name_en)
+                  setValue('country_ar', country.name_ar, { shouldValidate: true })
+                }}
+              />
+            )}
+          />
+        </FormField>
+
+        <FormField
           label="Country (Arabic)"
           htmlFor="country_ar"
           error={errors.country_ar?.message}
           required
+          hint="Filled in by the picker above."
         >
           <Input id="country_ar" dir="rtl" hasError={!!errors.country_ar} {...register('country_ar')} />
-        </FormField>
-        <FormField
-          label="Country (English)"
-          htmlFor="country_en"
-          error={errors.country_en?.message}
-          required
-        >
-          <Input id="country_en" hasError={!!errors.country_en} {...register('country_en')} />
         </FormField>
         <FormField label="Cover image URL" htmlFor="cover_image" error={errors.cover_image?.message}>
           <Controller

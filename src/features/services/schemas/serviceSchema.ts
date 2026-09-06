@@ -6,6 +6,11 @@ export const serviceSchema = z.object({
   description_ar: z.string(),
   description_en: z.string(),
   icon: z.string().max(50, 'Icon key must be 50 characters or fewer'),
+  // The website renders this through its localised Link, which prefixes the
+  // language — an absolute URL would come out as /ar/https://example.com.
+  link: z
+    .string()
+    .refine((value) => value === '' || value.startsWith('/'), 'Start with / — e.g. /visas'),
   image: z.string(),
   order: z.number().int('Order must be a whole number').min(0, 'Order must be zero or greater'),
   is_active: z.boolean(),

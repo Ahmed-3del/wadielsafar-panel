@@ -31,6 +31,9 @@ export function BranchForm({
       phone_display: initialValues?.phone_display ?? '',
       address_ar: initialValues?.address_ar ?? '',
       address_en: initialValues?.address_en ?? '',
+      latitude: initialValues?.latitude ?? '',
+      longitude: initialValues?.longitude ?? '',
+      is_main: initialValues?.is_main ?? false,
       order: initialValues?.order ?? 0,
       is_active: initialValues?.is_active ?? true,
     },
@@ -78,6 +81,35 @@ export function BranchForm({
         </FormField>
 
         <FormField
+          label="Latitude"
+          htmlFor="latitude"
+          error={errors.latitude?.message}
+          hint="In Google Maps, right-click the branch and click the numbers at the top — latitude first."
+        >
+          <Input
+            id="latitude"
+            dir="ltr"
+            placeholder="24.693200"
+            hasError={!!errors.latitude}
+            {...register('latitude')}
+          />
+        </FormField>
+        <FormField
+          label="Longitude"
+          htmlFor="longitude"
+          error={errors.longitude?.message}
+          hint="The second number. Leave both blank and the card shows the address without a map."
+        >
+          <Input
+            id="longitude"
+            dir="ltr"
+            placeholder="46.685400"
+            hasError={!!errors.longitude}
+            {...register('longitude')}
+          />
+        </FormField>
+
+        <FormField
           label="Order"
           htmlFor="order"
           error={errors.order?.message}
@@ -92,6 +124,14 @@ export function BranchForm({
           />
         </FormField>
       </div>
+
+      <label className="flex items-center gap-2 text-sm text-stone-700">
+        <input type="checkbox" className="h-4 w-4 rounded border-stone-300" {...register('is_main')} />
+        Main branch
+        <span className="text-xs text-stone-500">
+          — shown first, with a gold border and a badge. Expect exactly one.
+        </span>
+      </label>
 
       <label className="flex items-center gap-2 text-sm text-stone-700">
         <input type="checkbox" className="h-4 w-4 rounded border-stone-300" {...register('is_active')} />

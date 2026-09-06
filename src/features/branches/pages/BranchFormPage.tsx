@@ -27,7 +27,15 @@ export function BranchFormPage() {
   }
 
   const handleSubmit = (values: BranchFormValues) => {
-    save.mutate(values, {
+    // An empty string is not a decimal. The API takes null for "no pin", and
+    // that is what a blank coordinate field means.
+    const payload = {
+      ...values,
+      latitude: values.latitude.trim() || null,
+      longitude: values.longitude.trim() || null,
+    }
+
+    save.mutate(payload, {
       onSuccess: () => {
         showToast(recordId ? 'Branch updated.' : 'Branch created.')
         void navigate('/branches')

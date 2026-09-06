@@ -1,10 +1,10 @@
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, Input } from '@/components/ui'
+import { Button, Input, Select } from '@/components/ui'
 import { FormField } from '@/components/forms/FormField'
 import { MediaUploadField } from '@/components/forms/MediaUploadField'
 import { serviceSchema, type ServiceFormValues } from '../schemas/serviceSchema'
-import type { Service } from '../types'
+import { SERVICE_ICONS, type Service } from '../types'
 
 interface ServiceFormProps {
   initialValues?: Service
@@ -32,6 +32,7 @@ export function ServiceForm({
       description_ar: initialValues?.description_ar ?? '',
       description_en: initialValues?.description_en ?? '',
       icon: initialValues?.icon ?? '',
+      link: initialValues?.link ?? '',
       image: initialValues?.image ?? '',
       order: initialValues?.order ?? 0,
       is_active: initialValues?.is_active ?? true,
@@ -67,8 +68,29 @@ export function ServiceForm({
         >
           <Input id="description_en" {...register('description_en')} />
         </FormField>
-        <FormField label="Icon key" htmlFor="icon" error={errors.icon?.message}>
-          <Input id="icon" placeholder="plane" hasError={!!errors.icon} {...register('icon')} />
+        <FormField
+          label="Icon"
+          htmlFor="icon"
+          error={errors.icon?.message}
+          hint="The mark the website draws on this tile. Every option here is one the site can actually draw."
+        >
+          <Select id="icon" hasError={!!errors.icon} {...register('icon')}>
+            <option value="">Default (ticket)</option>
+            {SERVICE_ICONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </Select>
+        </FormField>
+
+        <FormField
+          label="Links to"
+          htmlFor="link"
+          error={errors.link?.message}
+          hint="A path on this site, e.g. /visas. Leave blank and the tile opens the contact form, which is right for anything an agent arranges by hand."
+        >
+          <Input id="link" dir="ltr" placeholder="/visas" hasError={!!errors.link} {...register('link')} />
         </FormField>
         <FormField label="Image URL" htmlFor="image" error={errors.image?.message}>
           <Controller

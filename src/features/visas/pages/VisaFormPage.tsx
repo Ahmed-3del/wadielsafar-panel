@@ -32,6 +32,9 @@ export function VisaFormPage() {
         ...values,
         country_id: Number(values.country_id),
         validity_days: values.validity_days ? Number(values.validity_days) : null,
+        // Blank means "fall back to the country's photo", which the API stores
+        // as null rather than an empty URL.
+        cover_image: values.cover_image.trim() || null,
       },
       {
         onSuccess: () => {

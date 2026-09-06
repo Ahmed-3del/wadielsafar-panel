@@ -7,6 +7,10 @@ export const cruiseSchema = z.object({
   cruise_line_en: z.string(),
   /** Plain string tied to the <select>; '' means no destination. */
   destination_id: z.string(),
+  /** The port's id as a string, tied to the picker's DOM value; '' means the
+   *  sailing is not linked to a port and will not answer the website's
+   *  country-and-port search. */
+  departure_port_id: z.string(),
   departure_port_ar: z.string(),
   departure_port_en: z.string(),
   description_ar: z.string(),

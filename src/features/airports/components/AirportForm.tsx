@@ -1,7 +1,8 @@
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Input } from '@/components/ui'
 import { FormField } from '@/components/forms/FormField'
+import { CountryField } from '@/components/forms/CountryField'
 import { airportSchema, type AirportFormValues } from '../schemas/airportSchema'
 import type { Airport } from '../types'
 
@@ -20,6 +21,8 @@ export function AirportForm({
 }: AirportFormProps) {
   const {
     register,
+    control,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm<AirportFormValues>({
@@ -106,20 +109,40 @@ export function AirportForm({
         </FormField>
 
         <FormField
+          label="Country"
+          htmlFor="country_en"
+          error={errors.country_en?.message ?? errors.country_ar?.message}
+          required
+          hint="Search and pick — the Arabic name and the two-letter code fill themselves in. Type freely if the country is not listed."
+        >
+          <Controller
+            name="country_en"
+            control={control}
+            render={({ field }) => (
+              <CountryField
+                id="country_en"
+                value={field.value}
+                onBlur={field.onBlur}
+                hasError={!!errors.country_en || !!errors.country_ar}
+                onType={field.onChange}
+                onPick={(country) => {
+                  field.onChange(country.name_en)
+                  setValue('country_ar', country.name_ar, { shouldValidate: true })
+                  setValue('country_code', country.iso2, { shouldValidate: true })
+                }}
+              />
+            )}
+          />
+        </FormField>
+
+        <FormField
           label="Country (Arabic)"
           htmlFor="country_ar"
           error={errors.country_ar?.message}
           required
+          hint="Filled in by the picker above; edit only if this airport's country needs a different wording."
         >
           <Input id="country_ar" dir="rtl" hasError={!!errors.country_ar} {...register('country_ar')} />
-        </FormField>
-        <FormField
-          label="Country (English)"
-          htmlFor="country_en"
-          error={errors.country_en?.message}
-          required
-        >
-          <Input id="country_en" hasError={!!errors.country_en} {...register('country_en')} />
         </FormField>
 
         <FormField

@@ -1,3 +1,5 @@
 export { VisasListPage } from './pages/VisasListPage'
 export { VisaFormPage } from './pages/VisaFormPage'
-export type { VisaType, VisaTypeWrite } from './types'
+export { VisaCountriesListPage } from './pages/VisaCountriesListPage'
+export { VisaCountryFormPage } from './pages/VisaCountryFormPage'
+export type { VisaType, VisaTypeWrite, VisaCountry, VisaCountryWrite } from './types'
