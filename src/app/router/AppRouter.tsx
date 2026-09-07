@@ -22,6 +22,16 @@ const InquiryFieldsListPage = lazy(() =>
 const InquiryFieldFormPage = lazy(() =>
   import('@/features/inquiryFields').then((m) => ({ default: m.InquiryFieldFormPage })),
 )
+const InquiryServiceTypesListPage = lazy(() =>
+  import('@/features/inquiryServiceTypes').then((m) => ({
+    default: m.InquiryServiceTypesListPage,
+  })),
+)
+const InquiryServiceTypeFormPage = lazy(() =>
+  import('@/features/inquiryServiceTypes').then((m) => ({
+    default: m.InquiryServiceTypeFormPage,
+  })),
+)
 const InquiryDetailPage = lazy(() =>
   import('@/features/inquiries').then((m) => ({ default: m.InquiryDetailPage })),
 )
@@ -171,6 +181,9 @@ const router = createBrowserRouter([
       { path: 'contact-fields', element: lazyRoute(<InquiryFieldsListPage />) },
       { path: 'contact-fields/new', element: lazyRoute(<InquiryFieldFormPage />) },
       { path: 'contact-fields/:id/edit', element: lazyRoute(<InquiryFieldFormPage />) },
+      { path: 'contact-services', element: lazyRoute(<InquiryServiceTypesListPage />) },
+      { path: 'contact-services/new', element: lazyRoute(<InquiryServiceTypeFormPage />) },
+      { path: 'contact-services/:id/edit', element: lazyRoute(<InquiryServiceTypeFormPage />) },
       { path: 'inquiries/:id', element: lazyRoute(<InquiryDetailPage />) },
       { path: 'destinations', element: lazyRoute(<DestinationsListPage />) },
       { path: 'destinations/new', element: lazyRoute(<DestinationFormPage />) },

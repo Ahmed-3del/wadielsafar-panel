@@ -4,6 +4,7 @@ import { Button, Input, Select } from '@/components/ui'
 import { FormField } from '@/components/forms/FormField'
 import { MediaUploadField } from '@/components/forms/MediaUploadField'
 import { serviceSchema, type ServiceFormValues } from '../schemas/serviceSchema'
+import { SERVICE_TYPES } from '@/features/inquiries/types'
 import { SERVICE_ICONS, type Service } from '../types'
 
 interface ServiceFormProps {
@@ -33,6 +34,7 @@ export function ServiceForm({
       description_en: initialValues?.description_en ?? '',
       icon: initialValues?.icon ?? '',
       link: initialValues?.link ?? '',
+      service_type: initialValues?.service_type ?? '',
       image: initialValues?.image ?? '',
       order: initialValues?.order ?? 0,
       is_active: initialValues?.is_active ?? true,
@@ -91,6 +93,22 @@ export function ServiceForm({
           hint="A path on this site, e.g. /visas. Leave blank and the tile opens the contact form, which is right for anything an agent arranges by hand."
         >
           <Input id="link" dir="ltr" placeholder="/visas" hasError={!!errors.link} {...register('link')} />
+        </FormField>
+
+        <FormField
+          label="Contact form opens on"
+          htmlFor="service_type"
+          error={errors.service_type?.message}
+          hint="For a tile with no page of its own: the service the form arrives already set to, so the reader is not asked what they just pressed. The tile's own name travels with it either way."
+        >
+          <Select id="service_type" hasError={!!errors.service_type} {...register('service_type')}>
+            <option value="">Leave the form on its default</option>
+            {SERVICE_TYPES.map((type) => (
+              <option key={type} value={type}>
+                {type.charAt(0) + type.slice(1).toLowerCase()}
+              </option>
+            ))}
+          </Select>
         </FormField>
         <FormField label="Image URL" htmlFor="image" error={errors.image?.message}>
           <Controller

@@ -16,6 +16,13 @@ export const promotionSchema = z.object({
    */
   ends_at: z.string(),
   icon: z.enum(PROMOTION_ICONS),
+  // The website renders this through its localised Link, which prefixes the
+  // language — an absolute URL would come out as /ar/https://example.com.
+  link: z
+    .string()
+    .refine((value) => value === '' || value.startsWith('/'), 'Start with / — e.g. /packages'),
+  cta_label_ar: z.string().max(60),
+  cta_label_en: z.string().max(60),
   order: z.number().int().min(0),
   is_active: z.boolean(),
 })

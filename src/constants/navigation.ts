@@ -15,6 +15,7 @@ export interface NavItem {
 export const NAV_ITEMS: NavItem[] = [
   { label: 'Dashboard', path: '/', roles: ALL_ROLES },
   { label: 'Inquiries', path: '/inquiries', roles: ALL_ROLES },
+  { label: 'Contact form services', path: '/contact-services', roles: ALL_ROLES },
   { label: 'Contact form questions', path: '/contact-fields', roles: ALL_ROLES },
   { label: 'Destinations', path: '/destinations', roles: ALL_ROLES },
   { label: 'Packages', path: '/packages', roles: ALL_ROLES },

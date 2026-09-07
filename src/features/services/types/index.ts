@@ -45,6 +45,10 @@ export interface Service {
   /** Where the tile leads, as a path on the site. Empty sends the reader to
    *  the contact form. */
   link: string
+  /** Which entry of the contact form's list a tile that leads to the form
+   *  should open on, so the reader is not asked what they just pressed.
+   *  Empty leaves the form on its own default. */
+  service_type: string
   order: number
   is_active: boolean
 }

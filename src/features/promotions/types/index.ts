@@ -17,6 +17,12 @@ export interface Promotion {
   /** ISO instant. Null means no announced end, and the card shows no timer. */
   ends_at: string | null
   icon: PromotionIcon
+  /** Where "claim this offer" leads, as a path on the site. Empty sends the
+   *  reader to the contact form carrying the code. */
+  link: string
+  /** Overrides the button's wording. Empty uses the website's own. */
+  cta_label_ar: string
+  cta_label_en: string
   order: number
   is_active: boolean
 }

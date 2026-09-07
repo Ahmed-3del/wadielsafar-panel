@@ -32,6 +32,9 @@ export function PromotionFormPage() {
     const payload = {
       ...values,
       ends_at: values.ends_at ? new Date(values.ends_at).toISOString() : null,
+      // Trimmed, so a stray space cannot make "/packages " a path that routes
+      // nowhere.
+      link: values.link.trim(),
     }
 
     save.mutate(payload, {

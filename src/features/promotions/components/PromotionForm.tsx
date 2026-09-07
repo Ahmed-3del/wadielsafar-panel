@@ -41,6 +41,9 @@ export function PromotionForm({
       code: initialValues?.code ?? '',
       ends_at: toLocalInputValue(initialValues?.ends_at ?? null),
       icon: initialValues?.icon ?? 'TAG',
+      link: initialValues?.link ?? '',
+      cta_label_ar: initialValues?.cta_label_ar ?? '',
+      cta_label_en: initialValues?.cta_label_en ?? '',
       order: initialValues?.order ?? 0,
       is_active: initialValues?.is_active ?? true,
     },
@@ -140,6 +143,31 @@ export function PromotionForm({
             hasError={!!errors.ends_at}
             {...register('ends_at')}
           />
+        </FormField>
+
+        <FormField
+          label="Claim button leads to"
+          htmlFor="link"
+          error={errors.link?.message}
+          hint="A path on this site, e.g. /packages. Leave blank and the button opens the contact form carrying this offer's name and code, so the agent sees what was promised."
+        >
+          <Input id="link" dir="ltr" placeholder="/packages" hasError={!!errors.link} {...register('link')} />
+        </FormField>
+
+        <FormField
+          label="Button text (Arabic)"
+          htmlFor="cta_label_ar"
+          error={errors.cta_label_ar?.message}
+          hint="Optional. Blank uses the website's own wording."
+        >
+          <Input id="cta_label_ar" dir="rtl" {...register('cta_label_ar')} />
+        </FormField>
+        <FormField
+          label="Button text (English)"
+          htmlFor="cta_label_en"
+          error={errors.cta_label_en?.message}
+        >
+          <Input id="cta_label_en" {...register('cta_label_en')} />
         </FormField>
 
         <FormField

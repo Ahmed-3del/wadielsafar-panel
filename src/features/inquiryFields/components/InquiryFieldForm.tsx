@@ -7,7 +7,7 @@ import {
   inquiryFieldSchema,
   type InquiryFieldFormValues,
 } from '../schemas/inquiryFieldSchema'
-import { INQUIRY_FIELD_TYPES, type InquiryField } from '../types'
+import { INQUIRY_FIELD_TYPES, OPTION_TYPES, type InquiryField } from '../types'
 
 interface InquiryFieldFormProps {
   initialValues?: InquiryField
@@ -40,15 +40,28 @@ export function InquiryFieldForm({
       options_ar: initialValues?.options_ar ?? '',
       options_en: initialValues?.options_en ?? '',
       is_required: initialValues?.is_required ?? false,
+      min_value: initialValues?.min_value ?? null,
+      max_value: initialValues?.max_value ?? null,
+      not_past: initialValues?.not_past ?? false,
+      not_before: initialValues?.not_before ?? '',
+      show_when_key: initialValues?.show_when_key ?? '',
+      show_when_value: initialValues?.show_when_value ?? '',
+      is_wide: initialValues?.is_wide ?? false,
+      group_ar: initialValues?.group_ar ?? '',
+      group_en: initialValues?.group_en ?? '',
       order: initialValues?.order ?? 0,
       is_active: initialValues?.is_active ?? true,
     },
   })
 
-  // The option boxes only mean anything for a choice field. `useWatch` rather
-  // than `watch`: the latter returns a function the React Compiler refuses to
-  // memoize, and skips optimising the whole form as a result.
-  const needsOptions = useWatch({ control, name: 'field_type' }) === 'SELECT'
+  // `useWatch` rather than `watch`: the latter returns a function the React
+  // Compiler refuses to memoize, and skips optimising the whole form.
+  const fieldType = useWatch({ control, name: 'field_type' })
+  // The options only mean anything where a list is shown, and the bounds only
+  // where there is a count.
+  const needsOptions = OPTION_TYPES.includes(fieldType as (typeof OPTION_TYPES)[number])
+  const needsBounds = fieldType === 'STEPPER' || fieldType === 'NUMBER'
+  const isDate = fieldType === 'DATE'
 
   return (
     <form
@@ -172,7 +185,92 @@ export function InquiryFieldForm({
             </FormField>
           </>
         ) : null}
+
+        {needsBounds ? (
+          <>
+            <FormField
+              label="Smallest allowed"
+              htmlFor="min_value"
+              error={errors.min_value?.message}
+              hint="The − button stops here. Leave blank for no bound."
+            >
+              <Input
+                id="min_value"
+                type="number"
+                min="0"
+                hasError={!!errors.min_value}
+                {...register('min_value', { setValueAs: (v) => (v === '' ? null : Number(v)) })}
+              />
+            </FormField>
+            <FormField
+              label="Largest allowed"
+              htmlFor="max_value"
+              error={errors.max_value?.message}
+              hint="The + button stops here."
+            >
+              <Input
+                id="max_value"
+                type="number"
+                min="0"
+                hasError={!!errors.max_value}
+                {...register('max_value', { setValueAs: (v) => (v === '' ? null : Number(v)) })}
+              />
+            </FormField>
+          </>
+        ) : null}
+
+        {isDate ? (
+          <FormField
+            label="Cannot be before"
+            htmlFor="not_before"
+            error={errors.not_before?.message}
+            hint="Another question's answer key on this service, e.g. depart. A return date cannot precede its departure. Leave blank for no rule."
+          >
+            <Input id="not_before" dir="ltr" placeholder="depart" {...register('not_before')} />
+          </FormField>
+        ) : null}
+
+        <FormField
+          label="Only ask when"
+          htmlFor="show_when_key"
+          error={errors.show_when_key?.message}
+          hint="Another question's answer key. Leave blank to always ask."
+        >
+          <Input id="show_when_key" dir="ltr" placeholder="trip_type" {...register('show_when_key')} />
+        </FormField>
+        <FormField
+          label="…has this answer"
+          htmlFor="show_when_value"
+          error={errors.show_when_value?.message}
+          hint="The English option, exactly as typed above — e.g. Round trip. One rule then covers both languages."
+        >
+          <Input id="show_when_value" placeholder="Round trip" {...register('show_when_value')} />
+        </FormField>
+
+        <FormField
+          label="Group heading (Arabic)"
+          htmlFor="group_ar"
+          error={errors.group_ar?.message}
+          hint="Optional. Questions in a row sharing a heading become one titled block."
+        >
+          <Input id="group_ar" dir="rtl" {...register('group_ar')} />
+        </FormField>
+        <FormField label="Group heading (English)" htmlFor="group_en" error={errors.group_en?.message}>
+          <Input id="group_en" {...register('group_en')} />
+        </FormField>
       </div>
+
+      <label className="flex items-center gap-2 text-sm text-stone-700">
+        <input type="checkbox" className="h-4 w-4 rounded border-stone-300" {...register('not_past')} />
+        Refuse dates in the past
+        <span className="text-xs text-stone-500">— dates only.</span>
+      </label>
+
+      <label className="flex items-center gap-2 text-sm text-stone-700">
+        <input type="checkbox" className="h-4 w-4 rounded border-stone-300" {...register('is_wide')} />
+        Full width
+        <span className="text-xs text-stone-500">— for a long answer.</span>
+      </label>
 
       <label className="flex items-center gap-2 text-sm text-stone-700">
         <input type="checkbox" className="h-4 w-4 rounded border-stone-300" {...register('is_required')} />

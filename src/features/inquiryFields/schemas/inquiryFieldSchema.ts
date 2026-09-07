@@ -1,7 +1,8 @@
 import { z } from 'zod'
 import { SERVICE_TYPES } from '@/features/inquiries/types'
+import { OPTION_TYPES } from '../types'
 
-const OPTION_TYPES = ['SELECT'] as const
+
 
 const lines = (text: string) =>
   text
@@ -20,14 +21,42 @@ export const inquiryFieldSchema = z
       .regex(/^[a-z0-9_-]+$/, 'Lower-case letters, numbers, hyphens and underscores only'),
     label_ar: z.string().min(1, 'Arabic label is required'),
     label_en: z.string().min(1, 'English label is required'),
-    field_type: z.enum(['TEXT', 'TEXTAREA', 'NUMBER', 'DATE', 'SELECT']),
+    field_type: z.enum([
+      'TEXT',
+      'TEXTAREA',
+      'NUMBER',
+      'DATE',
+      'SELECT',
+      'STEPPER',
+      'SEGMENTED',
+      'CHECKBOX',
+      'AIRPORT',
+      'CITY',
+    ]),
     placeholder_ar: z.string(),
     placeholder_en: z.string(),
     options_ar: z.string(),
     options_en: z.string(),
     is_required: z.boolean(),
+    // Blank stays blank: an empty box means "no bound", not zero.
+    min_value: z.number().int().min(0).nullable(),
+    max_value: z.number().int().min(0).nullable(),
+    not_past: z.boolean(),
+    not_before: z.string(),
+    show_when_key: z.string(),
+    show_when_value: z.string(),
+    is_wide: z.boolean(),
+    group_ar: z.string(),
+    group_en: z.string(),
     order: z.number().int().min(0),
     is_active: z.boolean(),
+  })
+  // A count with its bounds the wrong way round would leave the − and +
+  // buttons unable to reach anything.
+  .superRefine((values, ctx) => {
+    if (values.min_value !== null && values.max_value !== null && values.min_value > values.max_value) {
+      ctx.addIssue({ code: 'custom', path: ['max_value'], message: 'The largest count cannot be below the smallest' })
+    }
   })
   // The website zips the two option lists by position, so a missing line in
   // one language would put an Arabic label on an English answer. The API
