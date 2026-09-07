@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Badge, Button } from '@/components/ui'
+import { ImportDialog } from '@/components/modals/ImportDialog'
 import { DataTable, type DataTableColumn } from '@/components/tables/DataTable'
 import { ConfirmDialog } from '@/components/modals/ConfirmDialog'
 import { showToast } from '@/components/feedback'
@@ -12,6 +13,7 @@ import type { FlightDeal } from '../types'
 
 export function FlightsListPage() {
   const navigate = useNavigate()
+  const [importing, setImporting] = useState(false)
   const [page, setPage] = useState(1)
   const [pendingDelete, setPendingDelete] = useState<FlightDeal | null>(null)
   const { data, isLoading, isError, error, refetch } = useFlights(page)
@@ -82,13 +84,18 @@ export function FlightsListPage() {
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold text-navy-900">Flights</h1>
-        <Button
-          onClick={() => {
-            void navigate('/flights/new')
-          }}
-        >
-          New Flight Deal
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="secondary" onClick={() => { setImporting(true) }}>
+            Import
+          </Button>
+          <Button
+            onClick={() => {
+              void navigate('/flights/new')
+            }}
+          >
+            New Flight Deal
+          </Button>
+        </div>
       </div>
       <DataTable
         columns={columns}
@@ -138,6 +145,14 @@ export function FlightsListPage() {
         onCancel={() => {
           setPendingDelete(null)
         }}
+      />
+
+      <ImportDialog
+        open={importing}
+        resource="flights"
+        label="flight deals"
+        queryKey="flights"
+        onClose={() => { setImporting(false) }}
       />
     </div>
   )

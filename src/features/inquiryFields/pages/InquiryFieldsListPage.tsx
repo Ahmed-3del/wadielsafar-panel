@@ -6,6 +6,7 @@ import { ConfirmDialog } from '@/components/modals/ConfirmDialog'
 import { showToast } from '@/components/feedback'
 import { extractErrorMessage } from '@/services/api/client'
 import { SERVICE_TYPES } from '@/features/inquiries/types'
+import { useServiceOptions } from '@/features/services'
 import { useInquiryFields } from '../hooks/useInquiryFields'
 import { useDeleteInquiryField } from '../hooks/useDeleteInquiryField'
 import { INQUIRY_FIELD_TYPES, type InquiryField } from '../types'
@@ -18,10 +19,20 @@ export function InquiryFieldsListPage() {
   const [serviceType, setServiceType] = useState('')
   const [pendingDelete, setPendingDelete] = useState<InquiryField | null>(null)
   const { data, isLoading, isError, error, refetch } = useInquiryFields(page, serviceType)
+  // So the table can name the service a question belongs to rather than its id.
+  const { data: services } = useServiceOptions()
   const remove = useDeleteInquiryField()
 
   const columns: DataTableColumn<InquiryField>[] = [
-    { key: 'service_type', header: 'Service', render: (row) => row.service_type },
+    {
+      key: 'service_type',
+      header: 'Asked for',
+      render: (row) =>
+        row.service
+          ? (services?.find((service) => service.id === row.service)?.name_en ??
+            `Service #${row.service}`)
+          : row.service_type,
+    },
     { key: 'label_en', header: 'Question', render: (row) => row.label_en },
     { key: 'key', header: 'Answer key', render: (row) => <span dir="ltr">{row.key}</span> },
     {

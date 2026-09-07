@@ -39,6 +39,7 @@ export function ServiceFormPage() {
         // routes to nowhere.
         link: values.link.trim(),
         service_type: values.service_type,
+        is_on_contact_form: values.is_on_contact_form,
         image: toNullableString(values.image),
         order: values.order,
         is_active: values.is_active,

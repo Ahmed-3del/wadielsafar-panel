@@ -27,7 +27,12 @@ export function InquiryFieldFormPage() {
   }
 
   const handleSubmit = (values: InquiryFieldFormValues) => {
-    save.mutate(values, {
+    // A question belongs to one or the other. The type picker is disabled once
+    // a service is chosen, but a disabled control still carries its last value
+    // — and sending both would file the question under a type it is not asked
+    // for.
+    const payload = values.service ? { ...values, service_type: '' } : { ...values, service: null }
+    save.mutate(payload, {
       onSuccess: () => {
         showToast(recordId ? 'Question updated.' : 'Question added.')
         void navigate('/contact-fields')

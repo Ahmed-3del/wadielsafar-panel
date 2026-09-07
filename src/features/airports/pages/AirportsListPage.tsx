@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Badge, Button, Input } from '@/components/ui'
+import { ImportDialog } from '@/components/modals/ImportDialog'
 import { DataTable, type DataTableColumn } from '@/components/tables/DataTable'
 import { ConfirmDialog } from '@/components/modals/ConfirmDialog'
 import { showToast } from '@/components/feedback'
@@ -11,6 +12,7 @@ import type { Airport } from '../types'
 
 export function AirportsListPage() {
   const navigate = useNavigate()
+  const [importing, setImporting] = useState(false)
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState('')
   const [pendingDelete, setPendingDelete] = useState<Airport | null>(null)
@@ -87,13 +89,18 @@ export function AirportsListPage() {
             What the departure and arrival pickers offer on the website.
           </p>
         </div>
-        <Button
-          onClick={() => {
-            void navigate('/airports/new')
-          }}
-        >
-          New Airport
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="secondary" onClick={() => { setImporting(true) }}>
+            Import
+          </Button>
+          <Button
+            onClick={() => {
+              void navigate('/airports/new')
+            }}
+          >
+            New Airport
+          </Button>
+        </div>
       </div>
 
       {/* The catalogue is long enough that paging to an airport is not a real
@@ -156,6 +163,14 @@ export function AirportsListPage() {
         isConfirming={deleteAirport.isPending}
         onConfirm={handleConfirmDelete}
         onCancel={() => { setPendingDelete(null) }}
+      />
+
+      <ImportDialog
+        open={importing}
+        resource="airports"
+        label="airports"
+        queryKey="airports"
+        onClose={() => { setImporting(false) }}
       />
     </div>
   )

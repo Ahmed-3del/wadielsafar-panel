@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Badge, Button, Input } from '@/components/ui'
+import { ImportDialog } from '@/components/modals/ImportDialog'
 import { DataTable, type DataTableColumn } from '@/components/tables/DataTable'
 import { ConfirmDialog } from '@/components/modals/ConfirmDialog'
 import { showToast } from '@/components/feedback'
@@ -11,6 +12,7 @@ import type { CruisePort } from '@/features/cruises/types'
 
 export function CruisePortsListPage() {
   const navigate = useNavigate()
+  const [importing, setImporting] = useState(false)
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState('')
   const [pendingDelete, setPendingDelete] = useState<CruisePort | null>(null)
@@ -96,13 +98,18 @@ export function CruisePortsListPage() {
             What the website&rsquo;s cruise search offers: a country first, then one of its ports.
           </p>
         </div>
-        <Button
-          onClick={() => {
-            void navigate('/cruise-ports/new')
-          }}
-        >
-          New Port
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="secondary" onClick={() => { setImporting(true) }}>
+            Import
+          </Button>
+          <Button
+            onClick={() => {
+              void navigate('/cruise-ports/new')
+            }}
+          >
+            New Port
+          </Button>
+        </div>
       </div>
 
       <Input
@@ -159,6 +166,14 @@ export function CruisePortsListPage() {
         isConfirming={remove.isPending}
         onConfirm={handleConfirmDelete}
         onCancel={() => { setPendingDelete(null) }}
+      />
+
+      <ImportDialog
+        open={importing}
+        resource="cruises/ports"
+        label="cruise ports"
+        queryKey="cruisePorts"
+        onClose={() => { setImporting(false) }}
       />
     </div>
   )

@@ -3,6 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Input, Select } from '@/components/ui'
 import { FormField } from '@/components/forms/FormField'
 import { SERVICE_TYPES } from '@/features/inquiries/types'
+import { useServiceOptions } from '@/features/services'
 import {
   inquiryFieldSchema,
   type InquiryFieldFormValues,
@@ -31,6 +32,7 @@ export function InquiryFieldForm({
     resolver: zodResolver(inquiryFieldSchema),
     defaultValues: {
       service_type: initialValues?.service_type ?? 'FLIGHT',
+      service: initialValues?.service ?? null,
       key: initialValues?.key ?? '',
       label_ar: initialValues?.label_ar ?? '',
       label_en: initialValues?.label_en ?? '',
@@ -54,9 +56,14 @@ export function InquiryFieldForm({
     },
   })
 
+  const { data: services } = useServiceOptions()
+
   // `useWatch` rather than `watch`: the latter returns a function the React
   // Compiler refuses to memoize, and skips optimising the whole form.
   const fieldType = useWatch({ control, name: 'field_type' })
+  // A question belongs to one service, or to a whole service type. Asking for
+  // both would put the same question on the form twice.
+  const attachedToService = !!useWatch({ control, name: 'service' })
   // The options only mean anything where a list is shown, and the bounds only
   // where there is a count.
   const needsOptions = OPTION_TYPES.includes(fieldType as (typeof OPTION_TYPES)[number])
@@ -73,13 +80,41 @@ export function InquiryFieldForm({
     >
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <FormField
-          label="Asked for"
+          label="Asked for one service"
+          htmlFor="service"
+          error={errors.service?.message}
+          hint="A service from the Services screen — its own question, asked of nobody else. Leave blank to ask it of a whole service type instead."
+        >
+          <Select
+            id="service"
+            hasError={!!errors.service}
+            {...register('service', {
+              setValueAs: (value) => (value === '' ? null : Number(value)),
+            })}
+          >
+            <option value="">— a service type instead —</option>
+            {(services ?? []).map((service) => (
+              <option key={service.id} value={service.id}>
+                {service.name_en}
+                {service.is_on_contact_form ? '' : ' (not on the contact form yet)'}
+              </option>
+            ))}
+          </Select>
+        </FormField>
+
+        <FormField
+          label="…or asked for a whole service type"
           htmlFor="service_type"
           error={errors.service_type?.message}
-          required
-          hint="The website shows this question only when the visitor picks this service."
+          hint="Every enquiry of this type is asked it. Ignored when a service is picked above."
         >
-          <Select id="service_type" hasError={!!errors.service_type} {...register('service_type')}>
+          <Select
+            id="service_type"
+            hasError={!!errors.service_type}
+            disabled={attachedToService}
+            {...register('service_type')}
+          >
+            <option value="">— none —</option>
             {SERVICE_TYPES.map((type) => (
               <option key={type} value={type}>
                 {type.charAt(0) + type.slice(1).toLowerCase()}

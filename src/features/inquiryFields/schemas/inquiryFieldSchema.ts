@@ -12,7 +12,10 @@ const lines = (text: string) =>
 
 export const inquiryFieldSchema = z
   .object({
-    service_type: z.enum(SERVICE_TYPES as [string, ...string[]]),
+    // Blank is allowed here, because a question can belong to one service
+    // instead of to a type. The pair is checked below.
+    service_type: z.enum(['', ...SERVICE_TYPES] as [string, ...string[]]),
+    service: z.number().int().nullable(),
     // The answer is filed under this name, so it behaves like a column: lower
     // case, no spaces, and it should not change once enquiries carry it.
     key: z
@@ -50,6 +53,16 @@ export const inquiryFieldSchema = z
     group_en: z.string(),
     order: z.number().int().min(0),
     is_active: z.boolean(),
+  })
+  // A question has to belong to something, or nothing would ever ask it.
+  .superRefine((values, ctx) => {
+    if (!values.service && !values.service_type) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['service_type'],
+        message: 'Pick the service, or the service type, this question belongs to',
+      })
+    }
   })
   // A count with its bounds the wrong way round would leave the − and +
   // buttons unable to reach anything.

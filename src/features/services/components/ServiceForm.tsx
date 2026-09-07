@@ -35,6 +35,7 @@ export function ServiceForm({
       icon: initialValues?.icon ?? '',
       link: initialValues?.link ?? '',
       service_type: initialValues?.service_type ?? '',
+      is_on_contact_form: initialValues?.is_on_contact_form ?? false,
       image: initialValues?.image ?? '',
       order: initialValues?.order ?? 0,
       is_active: initialValues?.is_active ?? true,
@@ -96,10 +97,10 @@ export function ServiceForm({
         </FormField>
 
         <FormField
-          label="Contact form opens on"
+          label="Files enquiries under"
           htmlFor="service_type"
           error={errors.service_type?.message}
-          hint="For a tile with no page of its own: the service the form arrives already set to, so the reader is not asked what they just pressed. The tile's own name travels with it either way."
+          hint="Which column an enquiry for this service lands in, and what the Inquiries screen filters by. Most add-ons are Other — that is what it is for."
         >
           <Select id="service_type" hasError={!!errors.service_type} {...register('service_type')}>
             <option value="">Leave the form on its default</option>
@@ -135,6 +136,22 @@ export function ServiceForm({
           />
         </FormField>
       </div>
+      <label className="flex items-start gap-2 text-sm text-stone-700">
+        <input
+          type="checkbox"
+          className="mt-0.5 h-4 w-4 rounded border-stone-300"
+          {...register('is_on_contact_form')}
+        />
+        <span>
+          Offer this on the contact form
+          <span className="block text-xs text-stone-500">
+            It appears in the website&apos;s &ldquo;Service needed&rdquo; list by name, so nobody
+            has to pick &ldquo;Other&rdquo;. Once it is on, you can give it its own questions under
+            Contact form questions.
+          </span>
+        </span>
+      </label>
+
       <div className="flex gap-6">
         <label className="flex items-center gap-2 text-sm text-stone-700">
           <input type="checkbox" className="h-4 w-4 rounded border-stone-300" {...register('is_active')} />

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Button, Badge } from '@/components/ui'
+import { ImportDialog } from '@/components/modals/ImportDialog'
 import { DataTable, type DataTableColumn } from '@/components/tables/DataTable'
 import { ConfirmDialog } from '@/components/modals/ConfirmDialog'
 import { showToast } from '@/components/feedback'
@@ -11,6 +12,7 @@ import type { Destination } from '../types'
 
 export function DestinationsListPage() {
   const navigate = useNavigate()
+  const [importing, setImporting] = useState(false)
   const [page, setPage] = useState(1)
   const [pendingDelete, setPendingDelete] = useState<Destination | null>(null)
   const { data, isLoading, isError, error, refetch } = useDestinations(page)
@@ -68,13 +70,18 @@ export function DestinationsListPage() {
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold text-navy-900">Destinations</h1>
-        <Button
-          onClick={() => {
-            void navigate('/destinations/new')
-          }}
-        >
-          New Destination
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="secondary" onClick={() => { setImporting(true) }}>
+            Import
+          </Button>
+          <Button
+            onClick={() => {
+              void navigate('/destinations/new')
+            }}
+          >
+            New Destination
+          </Button>
+        </div>
       </div>
       <DataTable
         columns={columns}
@@ -124,6 +131,14 @@ export function DestinationsListPage() {
         onCancel={() => {
           setPendingDelete(null)
         }}
+      />
+
+      <ImportDialog
+        open={importing}
+        resource="destinations"
+        label="destinations"
+        queryKey="destinations"
+        onClose={() => { setImporting(false) }}
       />
     </div>
   )
