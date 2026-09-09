@@ -28,7 +28,9 @@ export const NAV_ITEMS: NavItem[] = [
   { label: 'Cruises', path: '/cruises', roles: ALL_ROLES },
   { label: 'Cruise ports', path: '/cruise-ports', roles: ALL_ROLES },
   { label: 'Offers', path: '/offers', roles: ALL_ROLES },
-  { label: 'Bookings', path: '/bookings', roles: ALL_ROLES },
+  // Route disabled in AppRouter — see the note there. A nav entry pointing
+  // at a route that does not exist is a dead link, not a coming-soon page.
+  // { label: 'Bookings', path: '/bookings', roles: ALL_ROLES },
   { label: 'Testimonials', path: '/testimonials', roles: ALL_ROLES },
   { label: 'Partners', path: '/partners', roles: ALL_ROLES },
   { label: 'Navigation', path: '/navigation', roles: ALL_ROLES },

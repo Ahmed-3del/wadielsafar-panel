@@ -95,9 +95,10 @@ const OffersListPage = lazy(() =>
 const OfferFormPage = lazy(() =>
   import('@/features/offers').then((m) => ({ default: m.OfferFormPage })),
 )
-const BookingsPage = lazy(() =>
-  import('@/features/bookings').then((m) => ({ default: m.BookingsPage })),
-)
+// Route disabled below alongside this — see the note there.
+// const BookingsPage = lazy(() =>
+//   import('@/features/bookings').then((m) => ({ default: m.BookingsPage })),
+// )
 const TestimonialsListPage = lazy(() =>
   import('@/features/testimonials').then((m) => ({ default: m.TestimonialsListPage })),
 )
@@ -216,6 +217,10 @@ const router = createBrowserRouter([
       { path: 'offers', element: lazyRoute(<OffersListPage />) },
       { path: 'offers/new', element: lazyRoute(<OfferFormPage />) },
       { path: 'offers/:slug/edit', element: lazyRoute(<OfferFormPage />) },
+      // Bookings is the phase-1 scaffold — a stub with one field behind it,
+      // not a screen anyone should reach yet. Disabled here and in
+      // NAV_ITEMS rather than deleted, so turning it back on when the real
+      // model lands is one uncomment in each place.
       // { path: 'bookings', element: lazyRoute(<BookingsPage />) },
       { path: 'testimonials', element: lazyRoute(<TestimonialsListPage />) },
       { path: 'testimonials/new', element: lazyRoute(<TestimonialFormPage />) },
