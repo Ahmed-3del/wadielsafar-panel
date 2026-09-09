@@ -8,13 +8,12 @@ export function Sidebar() {
 
   return (
     <aside className="flex w-60 shrink-0 flex-col border-r border-stone-200 bg-white">
-      <div className="flex items-center gap-2.5 px-5 py-5">
-        <img src="/logo-mark.png" alt="" aria-hidden="true" className="h-9 w-auto" />
-        <div>
-          {/* The company wordmark as drawn, not typed out in a system face. */}
-          <img src="/logo-words.png" alt="Wadi Al Safar" className="h-6 w-auto" />
-          <p className="mt-1 text-xs text-stone-500">Admin Panel</p>
-        </div>
+      <div className="px-5 py-5">
+        {/* The lockup as drawn, not typed out in a system face. It is wider
+            than it is tall, so the caption goes underneath rather than beside
+            it — side by side, a 240px rail leaves the words unreadable. */}
+        <img src="/logo-horizontal.png" alt="Wadi Al Safar" className="h-12 w-auto" />
+        <p className="mt-2 text-xs text-stone-500">Admin Panel</p>
       </div>
       <nav className="flex-1 space-y-0.5 overflow-y-auto px-3 pb-4">
         {items.map((item) => (

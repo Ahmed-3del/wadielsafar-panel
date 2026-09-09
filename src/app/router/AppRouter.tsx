@@ -216,7 +216,7 @@ const router = createBrowserRouter([
       { path: 'offers', element: lazyRoute(<OffersListPage />) },
       { path: 'offers/new', element: lazyRoute(<OfferFormPage />) },
       { path: 'offers/:slug/edit', element: lazyRoute(<OfferFormPage />) },
-      { path: 'bookings', element: lazyRoute(<BookingsPage />) },
+      // { path: 'bookings', element: lazyRoute(<BookingsPage />) },
       { path: 'testimonials', element: lazyRoute(<TestimonialsListPage />) },
       { path: 'testimonials/new', element: lazyRoute(<TestimonialFormPage />) },
       { path: 'testimonials/:id/edit', element: lazyRoute(<TestimonialFormPage />) },

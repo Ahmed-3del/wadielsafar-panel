@@ -34,7 +34,7 @@ export function LoginPage() {
   return (
     <div className="w-full max-w-sm rounded-lg border border-stone-200 bg-white p-8 shadow-sm">
       {/* Room here for the artwork as drawn, tagline and all. */}
-      <img src="/logo-full.png" alt="Wadi Al Safar" className="h-24 w-auto" />
+      <img src="/logo-horizontal.png" alt="Wadi Al Safar" className="h-16 w-auto" />
       <h1 className="mt-4 text-lg font-semibold text-navy-900">Wadi Al Safar Admin</h1>
       <p className="mt-1 text-sm text-stone-500">Sign in to manage the panel.</p>
 
