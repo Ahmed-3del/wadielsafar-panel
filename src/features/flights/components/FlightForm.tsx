@@ -193,6 +193,7 @@ export function FlightForm({
               <MediaUploadField
                 id="airline_logo"
                 accept="image"
+                shape="logo"
                 value={field.value ?? ''}
                 onChange={field.onChange}
                 onBlur={field.onBlur}

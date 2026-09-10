@@ -89,6 +89,7 @@ export function OfferForm({ initialValues, isSubmitting, submitLabel, onSubmit }
               <MediaUploadField
                 id="image"
                 accept="image"
+                shape="photo"
                 value={field.value ?? ''}
                 onChange={field.onChange}
                 onBlur={field.onBlur}

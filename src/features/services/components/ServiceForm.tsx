@@ -119,6 +119,7 @@ export function ServiceForm({
               <MediaUploadField
                 id="image"
                 accept="image"
+                shape="photo"
                 value={field.value ?? ''}
                 onChange={field.onChange}
                 onBlur={field.onBlur}

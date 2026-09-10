@@ -2,6 +2,7 @@ import { useId, useRef, useState } from 'react'
 import { Input } from '@/components/ui'
 import { mediaApi } from '@/features/media/services/mediaApi'
 import { extractErrorMessage } from '@/services/api/client'
+import { IMAGE_SHAPES, type ImageShape } from './imageShapes'
 
 const ACCEPT = {
   image: '.jpg,.jpeg,.png,.webp,.avif,.gif',
@@ -18,6 +19,11 @@ interface MediaUploadFieldProps {
   accept: keyof typeof ACCEPT
   placeholder?: string
   hasError?: boolean
+  /** How this field's image is framed on the site. Adds a full-width preview
+   *  at that exact shape below the field, plus a caption naming it — so an
+   *  editor sees the real crop, and knows what to prepare, before it goes
+   *  live. Omit for a field the site does not crop to any particular shape. */
+  shape?: ImageShape
 }
 
 /*
@@ -38,12 +44,14 @@ export function MediaUploadField({
   accept,
   placeholder = 'https://…',
   hasError,
+  shape,
 }: MediaUploadFieldProps) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [isUploading, setIsUploading] = useState(false)
   const [uploadError, setUploadError] = useState<string | null>(null)
   const [previewFailed, setPreviewFailed] = useState(false)
   const statusId = useId()
+  const spec = shape ? IMAGE_SHAPES[shape] : null
 
   const handleFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -70,7 +78,10 @@ export function MediaUploadField({
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-start gap-2">
-        {value && !previewFailed ? (
+        {value && !previewFailed && !spec ? (
+          // The small swatch, kept exactly as it was, for a field with no
+          // shape of its own — the big preview below replaces it rather than
+          // sitting beside it once there is one.
           <span className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-md border border-stone-200 bg-stone-50">
             {accept === 'image' ? (
               <img
@@ -119,6 +130,34 @@ export function MediaUploadField({
           onChange={(event) => void handleFile(event)}
         />
       </div>
+
+      {spec ? (
+        <div className="flex items-start gap-3 rounded-md border border-stone-200 bg-stone-50 p-2.5">
+          <div
+            className={`grid w-24 shrink-0 place-items-center overflow-hidden border border-stone-200 bg-white ${spec.box}`}
+          >
+            {value && !previewFailed ? (
+              <img
+                src={value}
+                alt=""
+                className={spec.fit === 'cover' ? 'h-full w-full object-cover' : 'h-full w-full object-contain p-1'}
+                onError={() => { setPreviewFailed(true) }}
+              />
+            ) : (
+              // Nothing to preview yet, or the URL does not resolve — the
+              // frame itself is still the point: it shows the shape before a
+              // single byte has uploaded, which is what tells an editor what
+              // to crop before they go looking for a photo.
+              <span className="px-2 text-center text-[10px] text-stone-400">No image yet</span>
+            )}
+          </div>
+          <p className="pt-0.5 text-xs leading-5 text-stone-500">
+            {previewFailed && value
+              ? "That URL didn't load as an image — the shape below is illustrative until it does."
+              : spec.hint}
+          </p>
+        </div>
+      ) : null}
 
       <p id={statusId} className="sr-only" aria-live="polite">
         {isUploading ? 'Uploading file' : ''}

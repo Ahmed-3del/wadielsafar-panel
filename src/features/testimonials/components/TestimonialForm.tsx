@@ -119,6 +119,7 @@ export function TestimonialForm({
               <MediaUploadField
                 id="avatar_image"
                 accept="image"
+                shape="badge"
                 value={field.value ?? ''}
                 onChange={field.onChange}
                 onBlur={field.onBlur}

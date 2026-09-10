@@ -163,6 +163,7 @@ export function VisaForm({ initialValues, isSubmitting, submitLabel, onSubmit }:
               <MediaUploadField
                 id="cover_image"
                 accept="image"
+                shape="photo"
                 value={field.value ?? ''}
                 onChange={field.onChange}
                 onBlur={field.onBlur}

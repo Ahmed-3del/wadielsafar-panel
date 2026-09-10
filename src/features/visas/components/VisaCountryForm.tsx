@@ -102,6 +102,7 @@ export function VisaCountryForm({
               <MediaUploadField
                 id="cover_image"
                 accept="image"
+                shape="photo"
                 value={field.value ?? ''}
                 onChange={field.onChange}
                 onBlur={field.onBlur}
@@ -115,7 +116,7 @@ export function VisaCountryForm({
           label="Flag"
           htmlFor="flag_image"
           error={errors.flag_image?.message}
-          hint="The small flag used in the visa search filters."
+          hint="Used twice: as the small flag in the visa search filters, and as the round badge stamped on every visa card for this country."
         >
           <Controller
             name="flag_image"
@@ -124,6 +125,7 @@ export function VisaCountryForm({
               <MediaUploadField
                 id="flag_image"
                 accept="image"
+                shape="badge"
                 value={field.value ?? ''}
                 onChange={field.onChange}
                 onBlur={field.onBlur}

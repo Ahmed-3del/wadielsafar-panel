@@ -181,6 +181,7 @@ export function CruiseForm({
               <MediaUploadField
                 id="cover_image"
                 accept="image"
+                shape="photo"
                 value={field.value ?? ''}
                 onChange={field.onChange}
                 onBlur={field.onBlur}

@@ -65,6 +65,7 @@ export function PartnerForm({
               <MediaUploadField
                 id="logo"
                 accept="image"
+                shape="logo"
                 value={field.value ?? ''}
                 onChange={field.onChange}
                 onBlur={field.onBlur}

@@ -85,6 +85,7 @@ export function CertificateForm({
               <MediaUploadField
                 id="image"
                 accept="image"
+                shape="logo"
                 value={field.value}
                 onChange={field.onChange}
                 onBlur={field.onBlur}
