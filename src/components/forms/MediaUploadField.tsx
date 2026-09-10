@@ -1,8 +1,9 @@
-import { useId, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { Input } from '@/components/ui'
 import { mediaApi } from '@/features/media/services/mediaApi'
 import { extractErrorMessage } from '@/services/api/client'
 import { IMAGE_SHAPES, type ImageShape } from './imageShapes'
+import { ImageCropModal } from './ImageCropModal'
 
 const ACCEPT = {
   image: '.jpg,.jpeg,.png,.webp,.avif,.gif',
@@ -22,7 +23,10 @@ interface MediaUploadFieldProps {
   /** How this field's image is framed on the site. Adds a full-width preview
    *  at that exact shape below the field, plus a caption naming it — so an
    *  editor sees the real crop, and knows what to prepare, before it goes
-   *  live. Omit for a field the site does not crop to any particular shape. */
+   *  live. Where the site crops to fill that shape, uploading a file first
+   *  opens a crop step so the editor picks which part of it survives, rather
+   *  than leaving that to wherever `object-cover` happens to centre itself.
+   *  Omit for a field the site does not crop to any particular shape. */
   shape?: ImageShape
 }
 
@@ -50,13 +54,25 @@ export function MediaUploadField({
   const [isUploading, setIsUploading] = useState(false)
   const [uploadError, setUploadError] = useState<string | null>(null)
   const [previewFailed, setPreviewFailed] = useState(false)
+  // The file just picked, waiting on a crop before it is sent anywhere. Kept
+  // as the object URL built from it, not the File alone, so the modal and the
+  // eventual canvas read the same picture and that URL can be revoked in one
+  // place once it is no longer needed.
+  const [pendingCrop, setPendingCrop] = useState<{ file: File; objectUrl: string } | null>(null)
   const statusId = useId()
   const spec = shape ? IMAGE_SHAPES[shape] : null
 
-  const handleFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (!file) return
+  // Closing the modal normally already revokes this; here for the one path
+  // that skips that — navigating away, or the field unmounting, mid-crop.
+  // Revoking twice is harmless, so no coordination with the explicit close
+  // is needed.
+  useEffect(() => {
+    return () => {
+      if (pendingCrop) URL.revokeObjectURL(pendingCrop.objectUrl)
+    }
+  }, [pendingCrop])
 
+  const uploadFile = async (file: File) => {
     setIsUploading(true)
     setUploadError(null)
     try {
@@ -70,9 +86,31 @@ export function MediaUploadField({
       setUploadError(extractErrorMessage(error))
     } finally {
       setIsUploading(false)
-      // Clear it, or choosing the same file twice after a failure is a no-op.
-      if (inputRef.current) inputRef.current.value = ''
     }
+  }
+
+  const handleFile = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    // Clear it here rather than after the upload settles: the file is already
+    // captured above, and clearing early is what lets choosing the same file
+    // twice — after cancelling a crop, say — register as a change at all.
+    if (inputRef.current) inputRef.current.value = ''
+    if (!file) return
+
+    if (spec?.crop) {
+      // A field the site crops to fill a frame: let the editor choose which
+      // part survives before a single byte leaves the browser, rather than
+      // uploading first and hoping `object-cover`'s centre crop happens to be
+      // the right part of the photo.
+      setPendingCrop({ file, objectUrl: URL.createObjectURL(file) })
+      return
+    }
+    void uploadFile(file)
+  }
+
+  const closeCropModal = () => {
+    if (pendingCrop) URL.revokeObjectURL(pendingCrop.objectUrl)
+    setPendingCrop(null)
   }
 
   return (
@@ -127,7 +165,7 @@ export function MediaUploadField({
           type="file"
           accept={ACCEPT[accept]}
           className="hidden"
-          onChange={(event) => void handleFile(event)}
+          onChange={handleFile}
         />
       </div>
 
@@ -167,6 +205,20 @@ export function MediaUploadField({
         <p role="alert" className="text-xs font-medium text-red-600">
           {uploadError}
         </p>
+      ) : null}
+
+      {pendingCrop && spec?.crop ? (
+        <ImageCropModal
+          objectUrl={pendingCrop.objectUrl}
+          originalName={pendingCrop.file.name}
+          aspect={spec.crop.aspect}
+          cropShape={spec.crop.shape}
+          onCancel={closeCropModal}
+          onCropped={(croppedFile) => {
+            closeCropModal()
+            void uploadFile(croppedFile)
+          }}
+        />
       ) : null}
     </div>
   )
