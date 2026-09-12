@@ -20,6 +20,9 @@ export interface FlightDeal {
   airline_name_ar: string
   airline_name_en: string
   airline_logo: string | null
+  /** A photo of the route, shown as the card's cover. Blank shows the card's
+   *  own brand-coloured block instead. */
+  cover_image: string | null
   trip_type: TripType
   cabin_class: CabinClass
   price_from: string
@@ -45,6 +48,7 @@ export interface FlightDealWrite {
   airline_name_ar: string
   airline_name_en: string
   airline_logo: string | null
+  cover_image: string | null
   trip_type: TripType
   cabin_class: CabinClass
   price_from: number

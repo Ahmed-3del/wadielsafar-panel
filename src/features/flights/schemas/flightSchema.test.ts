@@ -13,6 +13,7 @@ const baseFlight = {
   airline_name_ar: '',
   airline_name_en: '',
   airline_logo: '',
+  cover_image: '',
   trip_type: 'ROUND_TRIP',
   cabin_class: 'ECONOMY',
   price_from: 1250,

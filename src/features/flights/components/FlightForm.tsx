@@ -40,6 +40,7 @@ export function FlightForm({
       airline_name_ar: initialValues?.airline_name_ar ?? '',
       airline_name_en: initialValues?.airline_name_en ?? '',
       airline_logo: initialValues?.airline_logo ?? '',
+      cover_image: initialValues?.cover_image ?? '',
       trip_type: initialValues?.trip_type ?? 'ROUND_TRIP',
       cabin_class: initialValues?.cabin_class ?? 'ECONOMY',
       price_from: initialValues ? Number(initialValues.price_from) : 0,
@@ -197,6 +198,29 @@ export function FlightForm({
                 value={field.value ?? ''}
                 onChange={field.onChange}
                 onBlur={field.onBlur}
+              />
+            )}
+          />
+        </FormField>
+        <FormField
+          label="Cover photo"
+          htmlFor="cover_image"
+          error={errors.cover_image?.message}
+          className="sm:col-span-2"
+          hint="Shown as the card's photo — the destination, usually. Leave blank and the card shows its own brand-coloured block instead."
+        >
+          <Controller
+            name="cover_image"
+            control={control}
+            render={({ field }) => (
+              <MediaUploadField
+                id="cover_image"
+                accept="image"
+                shape="photo"
+                value={field.value ?? ''}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                hasError={!!errors.cover_image}
               />
             )}
           />

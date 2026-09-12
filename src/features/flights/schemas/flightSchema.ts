@@ -18,6 +18,7 @@ export const flightSchema = z
     airline_name_ar: z.string(),
     airline_name_en: z.string(),
     airline_logo: z.string(),
+    cover_image: z.string(),
     trip_type: z.enum(['ONE_WAY', 'ROUND_TRIP', 'MULTI_CITY']),
     cabin_class: z.enum(['ECONOMY', 'PREMIUM_ECONOMY', 'BUSINESS', 'FIRST']),
     price_from: z.number().min(0, 'Price must be zero or greater'),

@@ -31,6 +31,8 @@ export function BranchForm({
       phone_display: initialValues?.phone_display ?? '',
       address_ar: initialValues?.address_ar ?? '',
       address_en: initialValues?.address_en ?? '',
+      working_hours_ar: initialValues?.working_hours_ar ?? '',
+      working_hours_en: initialValues?.working_hours_en ?? '',
       latitude: initialValues?.latitude ?? '',
       longitude: initialValues?.longitude ?? '',
       google_maps_url: initialValues?.google_maps_url ?? '',
@@ -79,6 +81,23 @@ export function BranchForm({
         </FormField>
         <FormField label="Address (English)" htmlFor="address_en" error={errors.address_en?.message}>
           <Input id="address_en" {...register('address_en')} />
+        </FormField>
+
+        <FormField
+          label="Working hours (Arabic)"
+          htmlFor="working_hours_ar"
+          error={errors.working_hours_ar?.message}
+          hint="e.g. السبت – الخميس: ٩ ص – ٩ م. Leave blank to hide this row on the card."
+        >
+          <Input id="working_hours_ar" dir="rtl" {...register('working_hours_ar')} />
+        </FormField>
+        <FormField
+          label="Working hours (English)"
+          htmlFor="working_hours_en"
+          error={errors.working_hours_en?.message}
+          hint="e.g. Sat–Thu: 9am–9pm."
+        >
+          <Input id="working_hours_en" dir="ltr" {...register('working_hours_en')} />
         </FormField>
 
         <FormField

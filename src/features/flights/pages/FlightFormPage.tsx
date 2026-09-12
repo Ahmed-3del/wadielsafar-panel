@@ -40,6 +40,7 @@ export function FlightFormPage() {
         airline_name_ar: values.airline_name_ar,
         airline_name_en: values.airline_name_en,
         airline_logo: toNullableString(values.airline_logo),
+        cover_image: toNullableString(values.cover_image),
         trip_type: values.trip_type,
         cabin_class: values.cabin_class,
         price_from: values.price_from,

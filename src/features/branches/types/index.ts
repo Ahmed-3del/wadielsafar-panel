@@ -6,6 +6,9 @@ export interface Branch {
   phone_display: string
   address_ar: string
   address_en: string
+  /** Free text, e.g. "Sat–Thu: 9am–9pm". Blank hides the row on the card. */
+  working_hours_ar: string
+  working_hours_en: string
   /** Decimal degrees, as strings. Null when nobody has dropped the pin: the
    *  site then prints the address without a map rather than a map of nowhere. */
   latitude: string | null
