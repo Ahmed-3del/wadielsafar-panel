@@ -1,10 +1,10 @@
 export type HeroMediaType = 'NONE' | 'IMAGE' | 'VIDEO'
 
-// The homepage is deliberately absent: it uses the search band as its hero
-// instead of a photo, and offering "Home" here let an editor open it, change
-// its background, save it, and see nothing move — nothing on the homepage
-// has read this table since. See the backend migration that dropped it.
+// "home" backs the search band at the top of the homepage — only its
+// background is used there (image, video, gradient); the copy fields are
+// ignored, since that band keeps its own translated heading.
 export const PAGE_KEYS = [
+  'home',
   'destinations',
   'packages',
   'visas',

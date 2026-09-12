@@ -51,6 +51,12 @@ export function PageHeroForm({
   // useWatch rather than watch(): reading `watch` during render trips the
   // React Compiler lint rule.
   const mediaType = useWatch({ control, name: 'media_type' })
+  const pageKey = useWatch({ control, name: 'page_key' })
+  // "home" backs the search band, which keeps its own translated heading —
+  // showing these fields there would let an editor fill them in and watch
+  // them go nowhere, the exact trap this page used to be before its background
+  // was wired up.
+  const showCopyOverrides = pageKey !== 'home'
 
   return (
     <form
@@ -176,32 +182,38 @@ export function PageHeroForm({
         )}
       </div>
 
-      <div>
-        <p className="text-sm font-medium text-navy-900">Copy overrides</p>
-        <p className="mt-1 text-xs text-stone-500">
-          Leave blank to keep the site&apos;s own translated text for this page.
-        </p>
-        <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <FormField label="Eyebrow (Arabic)" htmlFor="eyebrow_ar">
-            <Input id="eyebrow_ar" dir="rtl" {...register('eyebrow_ar')} />
-          </FormField>
-          <FormField label="Eyebrow (English)" htmlFor="eyebrow_en">
-            <Input id="eyebrow_en" {...register('eyebrow_en')} />
-          </FormField>
-          <FormField label="Title (Arabic)" htmlFor="title_ar">
-            <Input id="title_ar" dir="rtl" {...register('title_ar')} />
-          </FormField>
-          <FormField label="Title (English)" htmlFor="title_en">
-            <Input id="title_en" {...register('title_en')} />
-          </FormField>
-          <FormField label="Subtitle (Arabic)" htmlFor="subtitle_ar">
-            <Input id="subtitle_ar" dir="rtl" {...register('subtitle_ar')} />
-          </FormField>
-          <FormField label="Subtitle (English)" htmlFor="subtitle_en">
-            <Input id="subtitle_en" {...register('subtitle_en')} />
-          </FormField>
+      {showCopyOverrides ? (
+        <div>
+          <p className="text-sm font-medium text-navy-900">Copy overrides</p>
+          <p className="mt-1 text-xs text-stone-500">
+            Leave blank to keep the site&apos;s own translated text for this page.
+          </p>
+          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <FormField label="Eyebrow (Arabic)" htmlFor="eyebrow_ar">
+              <Input id="eyebrow_ar" dir="rtl" {...register('eyebrow_ar')} />
+            </FormField>
+            <FormField label="Eyebrow (English)" htmlFor="eyebrow_en">
+              <Input id="eyebrow_en" {...register('eyebrow_en')} />
+            </FormField>
+            <FormField label="Title (Arabic)" htmlFor="title_ar">
+              <Input id="title_ar" dir="rtl" {...register('title_ar')} />
+            </FormField>
+            <FormField label="Title (English)" htmlFor="title_en">
+              <Input id="title_en" {...register('title_en')} />
+            </FormField>
+            <FormField label="Subtitle (Arabic)" htmlFor="subtitle_ar">
+              <Input id="subtitle_ar" dir="rtl" {...register('subtitle_ar')} />
+            </FormField>
+            <FormField label="Subtitle (English)" htmlFor="subtitle_en">
+              <Input id="subtitle_en" {...register('subtitle_en')} />
+            </FormField>
+          </div>
         </div>
-      </div>
+      ) : (
+        <p className="text-xs text-stone-500">
+          This page keeps its own translated heading — only the background above is used here.
+        </p>
+      )}
 
       <label className="flex items-center gap-2 text-sm text-stone-700">
         <input type="checkbox" className="h-4 w-4 rounded border-stone-300" {...register('is_active')} />
