@@ -10,6 +10,10 @@ export interface Branch {
    *  site then prints the address without a map rather than a map of nowhere. */
   latitude: string | null
   longitude: string | null
+  /** Pasted from Google Maps' own Share button. Blank makes "view on map"
+   *  search by name and address instead of opening this branch's real
+   *  listing directly. */
+  google_maps_url: string
   /** The head office. The site gives it a gold border and a badge. */
   is_main: boolean
   order: number

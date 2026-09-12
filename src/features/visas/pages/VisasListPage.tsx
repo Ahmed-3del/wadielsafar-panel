@@ -28,6 +28,11 @@ export function VisasListPage() {
       render: (row) => row.processing_time_days,
     },
     {
+      key: 'is_featured',
+      header: 'Featured',
+      render: (row) => (row.is_featured ? <Badge tone="info">Featured</Badge> : null),
+    },
+    {
       key: 'is_active',
       header: 'Status',
       render: (row) => (

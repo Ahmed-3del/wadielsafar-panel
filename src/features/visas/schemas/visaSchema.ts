@@ -15,6 +15,7 @@ export const visaSchema = z.object({
   processing_time_days: z.number().int().min(0, 'Must be zero or greater'),
   /** Optional: some visas vary by applicant, and a wrong number is worse than none. */
   validity_days: z.string(),
+  is_featured: z.boolean(),
   is_active: z.boolean(),
 })
 

@@ -43,6 +43,8 @@ export interface VisaType {
   price: string
   processing_time_days: number
   validity_days: number | null
+  /** Shown in the homepage's own visa rail. */
+  is_featured: boolean
   is_active: boolean
 }
 
@@ -63,5 +65,6 @@ export interface VisaTypeWrite {
   price: number
   processing_time_days: number
   validity_days: number | null
+  is_featured: boolean
   is_active: boolean
 }

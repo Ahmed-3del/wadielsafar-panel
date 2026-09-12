@@ -37,6 +37,7 @@ export function VisaForm({ initialValues, isSubmitting, submitLabel, onSubmit }:
       price: initialValues ? Number(initialValues.price) : 0,
       processing_time_days: initialValues?.processing_time_days ?? 1,
       validity_days: initialValues?.validity_days ? String(initialValues.validity_days) : '',
+      is_featured: initialValues?.is_featured ?? false,
       is_active: initialValues?.is_active ?? true,
     },
   })
@@ -173,10 +174,16 @@ export function VisaForm({ initialValues, isSubmitting, submitLabel, onSubmit }:
           />
         </FormField>
       </div>
-      <label className="flex items-center gap-2 text-sm text-stone-700">
-        <input type="checkbox" className="h-4 w-4 rounded border-stone-300" {...register('is_active')} />
-        Active
-      </label>
+      <div className="flex gap-6">
+        <label className="flex items-center gap-2 text-sm text-stone-700">
+          <input type="checkbox" className="h-4 w-4 rounded border-stone-300" {...register('is_featured')} />
+          Featured
+        </label>
+        <label className="flex items-center gap-2 text-sm text-stone-700">
+          <input type="checkbox" className="h-4 w-4 rounded border-stone-300" {...register('is_active')} />
+          Active
+        </label>
+      </div>
       <div className="flex justify-end">
         <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? 'Saving…' : submitLabel}

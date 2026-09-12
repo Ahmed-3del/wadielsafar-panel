@@ -33,6 +33,7 @@ export function BranchForm({
       address_en: initialValues?.address_en ?? '',
       latitude: initialValues?.latitude ?? '',
       longitude: initialValues?.longitude ?? '',
+      google_maps_url: initialValues?.google_maps_url ?? '',
       is_main: initialValues?.is_main ?? false,
       order: initialValues?.order ?? 0,
       is_active: initialValues?.is_active ?? true,
@@ -106,6 +107,22 @@ export function BranchForm({
             placeholder="46.685400"
             hasError={!!errors.longitude}
             {...register('longitude')}
+          />
+        </FormField>
+
+        <FormField
+          label="Google Maps link"
+          htmlFor="google_maps_url"
+          error={errors.google_maps_url?.message}
+          className="sm:col-span-2"
+          hint="Open this branch on Google Maps, tap Share, and paste the link here — that is what lets 'view on map' show its real listing (name, photo, rating) instead of just a pin at its coordinates. Leave blank to search by name and address instead."
+        >
+          <Input
+            id="google_maps_url"
+            dir="ltr"
+            placeholder="https://maps.app.goo.gl/…"
+            hasError={!!errors.google_maps_url}
+            {...register('google_maps_url')}
           />
         </FormField>
 

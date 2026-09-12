@@ -37,6 +37,7 @@ export const NAV_ITEMS: NavItem[] = [
   { label: 'Certificates', path: '/certificates', roles: ALL_ROLES },
   { label: 'Branches', path: '/branches', roles: ALL_ROLES },
   { label: 'Promotions', path: '/promotions', roles: ALL_ROLES },
+  { label: 'Promo bar', path: '/promo-bar', roles: ALL_ROLES },
   { label: 'Social links', path: '/social-links', roles: ALL_ROLES },
   { label: 'Homepage sections', path: '/home-sections', roles: ALL_ROLES },
   { label: 'Page heroes', path: '/pages', roles: ALL_ROLES },

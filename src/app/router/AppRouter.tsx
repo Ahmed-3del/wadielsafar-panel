@@ -141,6 +141,9 @@ const PromotionsListPage = lazy(() =>
 const PromotionFormPage = lazy(() =>
   import('@/features/promotions').then((m) => ({ default: m.PromotionFormPage })),
 )
+const PromoBarPage = lazy(() =>
+  import('@/features/promoBar').then((m) => ({ default: m.PromoBarPage })),
+)
 const SocialLinksListPage = lazy(() =>
   import('@/features/socialLinks').then((m) => ({ default: m.SocialLinksListPage })),
 )
@@ -243,6 +246,7 @@ const router = createBrowserRouter([
       { path: 'promotions', element: lazyRoute(<PromotionsListPage />) },
       { path: 'promotions/new', element: lazyRoute(<PromotionFormPage />) },
       { path: 'promotions/:id/edit', element: lazyRoute(<PromotionFormPage />) },
+      { path: 'promo-bar', element: lazyRoute(<PromoBarPage />) },
       { path: 'social-links', element: lazyRoute(<SocialLinksListPage />) },
       { path: 'social-links/new', element: lazyRoute(<SocialLinkFormPage />) },
       { path: 'social-links/:id/edit', element: lazyRoute(<SocialLinkFormPage />) },

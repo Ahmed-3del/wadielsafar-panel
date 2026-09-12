@@ -26,6 +26,9 @@ export const branchSchema = z
     address_en: z.string(),
     latitude: coordinate(90, 'Latitude must be between -90 and 90, or left blank'),
     longitude: coordinate(180, 'Longitude must be between -180 and 180, or left blank'),
+    google_maps_url: z
+      .string()
+      .refine((value) => value === '' || value.startsWith('https://'), 'Paste a full https:// link'),
     is_main: z.boolean(),
     order: z.number().int().min(0),
     is_active: z.boolean(),
