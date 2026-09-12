@@ -32,6 +32,16 @@ export const IMAGE_SHAPES = {
     crop: { aspect: 1, shape: 'round' as const },
     hint: 'Shown as a small round badge, cropped to fill it — a close-up, centred image works best.',
   },
+  // PageHeader (every inner page's banner) and HomeSearch (the homepage
+  // search band) — both render PageHero through the shared HeroBackground,
+  // full page width and a fixed, short height, so a photo suited to a card's
+  // 16:9 frame is far too narrow a slice here.
+  hero: {
+    box: 'aspect-[4/1] rounded-lg',
+    fit: 'cover' as const,
+    crop: { aspect: 4, shape: 'rect' as const },
+    hint: 'Shown as a wide, short banner across the full page width, cropped to fill it — the middle of the image is kept, the edges are trimmed first. At least 1920×480px.',
+  },
   // Partner and certificate logos, an airline mark: never cropped, because a
   // logo cut at the edge is a logo nobody recognises.
   logo: {

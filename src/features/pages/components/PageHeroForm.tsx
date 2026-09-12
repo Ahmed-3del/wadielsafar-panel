@@ -99,7 +99,6 @@ export function PageHeroForm({
             error={errors.image_url?.message}
             required
             className="sm:col-span-2"
-            hint="Landscape, at least 1920×1080px. It's stretched full width and cropped to fit the band, so anything smaller or portrait will blur or lose its edges."
           >
             <Controller
               name="image_url"
@@ -112,6 +111,7 @@ export function PageHeroForm({
                   value={field.value ?? ''}
                   onChange={field.onChange}
                   onBlur={field.onBlur}
+                  shape="hero"
                 />
               )}
             />
@@ -145,7 +145,7 @@ export function PageHeroForm({
               label="Poster image"
               htmlFor="poster_url"
               error={errors.poster_url?.message}
-              hint="Shown on mobile, on slow connections, and to visitors who prefer reduced motion. Same size as the image above: landscape, at least 1920×1080px."
+              hint="Shown on mobile, on slow connections, and to visitors who prefer reduced motion."
             >
               <Controller
                 name="poster_url"
@@ -158,6 +158,7 @@ export function PageHeroForm({
                     value={field.value ?? ''}
                     onChange={field.onChange}
                     onBlur={field.onBlur}
+                    shape="hero"
                   />
                 )}
               />
