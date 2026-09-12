@@ -24,7 +24,6 @@ export const branchSchema = z
     phone_display: z.string(),
     address_ar: z.string(),
     address_en: z.string(),
-    cover_image: z.string(),
     working_hours_ar: z.string(),
     working_hours_en: z.string(),
     latitude: coordinate(90, 'Latitude must be between -90 and 90, or left blank'),

@@ -6,8 +6,6 @@ export interface Branch {
   phone_display: string
   address_ar: string
   address_en: string
-  /** A photo of the office. Blank shows the map preview in its place. */
-  cover_image: string | null
   /** Free text, e.g. "Sat–Thu: 9am–9pm". Blank hides the row on the card. */
   working_hours_ar: string
   working_hours_en: string

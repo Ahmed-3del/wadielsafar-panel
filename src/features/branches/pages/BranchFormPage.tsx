@@ -2,7 +2,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Card } from '@/components/ui'
 import { Spinner, ErrorState, showToast } from '@/components/feedback'
 import { extractErrorMessage } from '@/services/api/client'
-import { toNullableString } from '@/utils/formValues'
 import { BranchForm } from '../components/BranchForm'
 import { useBranch } from '../hooks/useBranch'
 import { useSaveBranch } from '../hooks/useSaveBranch'
@@ -34,7 +33,6 @@ export function BranchFormPage() {
       ...values,
       latitude: values.latitude.trim() || null,
       longitude: values.longitude.trim() || null,
-      cover_image: toNullableString(values.cover_image),
     }
 
     save.mutate(payload, {

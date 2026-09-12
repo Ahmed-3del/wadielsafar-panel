@@ -1,8 +1,7 @@
-import { Controller, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Input } from '@/components/ui'
 import { FormField } from '@/components/forms/FormField'
-import { MediaUploadField } from '@/components/forms/MediaUploadField'
 import { branchSchema, type BranchFormValues } from '../schemas/branchSchema'
 import type { Branch } from '../types'
 
@@ -21,7 +20,6 @@ export function BranchForm({
 }: BranchFormProps) {
   const {
     register,
-    control,
     handleSubmit,
     formState: { errors },
   } = useForm<BranchFormValues>({
@@ -33,7 +31,6 @@ export function BranchForm({
       phone_display: initialValues?.phone_display ?? '',
       address_ar: initialValues?.address_ar ?? '',
       address_en: initialValues?.address_en ?? '',
-      cover_image: initialValues?.cover_image ?? '',
       working_hours_ar: initialValues?.working_hours_ar ?? '',
       working_hours_en: initialValues?.working_hours_en ?? '',
       latitude: initialValues?.latitude ?? '',
@@ -84,30 +81,6 @@ export function BranchForm({
         </FormField>
         <FormField label="Address (English)" htmlFor="address_en" error={errors.address_en?.message}>
           <Input id="address_en" {...register('address_en')} />
-        </FormField>
-
-        <FormField
-          label="Cover photo"
-          htmlFor="cover_image"
-          error={errors.cover_image?.message}
-          className="sm:col-span-2"
-          hint="A photo of the office — the storefront or the desk. Leave blank and the branch list shows its map preview instead."
-        >
-          <Controller
-            name="cover_image"
-            control={control}
-            render={({ field }) => (
-              <MediaUploadField
-                id="cover_image"
-                accept="image"
-                shape="photo"
-                value={field.value ?? ''}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
-                hasError={!!errors.cover_image}
-              />
-            )}
-          />
         </FormField>
 
         <FormField
