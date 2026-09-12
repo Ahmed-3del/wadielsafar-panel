@@ -27,7 +27,10 @@ export function PageHeroForm({
   } = useForm<PageHeroFormValues>({
     resolver: zodResolver(pageHeroSchema),
     defaultValues: {
-      page_key: initialValues?.page_key ?? 'home',
+      // The first entry rather than a name typed out here, so removing a key
+      // from the list (as "home" just was) can never leave this defaulting to
+      // a choice that no longer exists.
+      page_key: initialValues?.page_key ?? PAGE_KEYS[0],
       media_type: initialValues?.media_type ?? 'NONE',
       image_url: initialValues?.image_url ?? '',
       video_url: initialValues?.video_url ?? '',
